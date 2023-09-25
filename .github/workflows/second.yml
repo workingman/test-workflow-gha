@@ -1,0 +1,21 @@
+name: Second Workflow
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/first_workflow.yml'
+
+jobs:
+  echo_saved_date:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download datetime artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: datetime-artifact
+
+    - name: Cat saved date and time
+      run: cat datetime.txt
