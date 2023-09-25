@@ -6,13 +6,13 @@ on:
       - closed
 
 jobs:
-  use_data:
+  retrieve_uuid:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Cat saved UUID
-      run: cat .github/uuid.txt
+    - name: Fetch UUID from PR comment
+      run: |
+        COMMENTS=$(gh pr view ${{ github.event.pull_request.number }} --json comments -q '.comments[].body')
+        UUID=$(echo "$COMMENTS" | grep "Generated-UUID:" | awk '{print $2}')
+        echo "UUID: $UUID"
