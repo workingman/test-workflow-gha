@@ -1,19 +1,26 @@
-name: Create deployment when PR opened
+name: First Workflow
+
 on:
   pull_request:
+    branches:
+      - feature/*
     types:
       - opened
 
 jobs:
-  echo_date:
+  generate_uuid:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Echo date and time
-      run: date '+%Y-%m-%d %H:%M:%S' > datetime.txt
+    - name: Generate UUID
+      id: generate-uuid
+      run: echo "::set-output name=uuid::$(uuidgen)"
+      
+    - name: Save UUID to file
+      run: echo "${{ steps.generate-uuid.outputs.uuid }}" > uuid.txt
 
-    - name: Upload datetime as artifact
+    - name: Upload UUID as artifact
       uses: actions/upload-artifact@v2
       with:
-        name: datetime-artifact
-        path: datetime.txt
+        name: uuid-artifact-${{ github.event.pull_request.number }}
+        path: uuid.txt
