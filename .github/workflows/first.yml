@@ -1,0 +1,22 @@
+name: First Workflow
+
+on:
+  pull_request:
+    branches:
+      - feature/*
+    types:
+      - opened
+
+jobs:
+  echo_date:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Echo date and time
+      run: date '+%Y-%m-%d %H:%M:%S' > datetime.txt
+
+    - name: Upload datetime as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: datetime-artifact
+        path: datetime.txt
