@@ -16,3 +16,7 @@ jobs:
         COMMENTS=$(gh pr view ${{ github.event.pull_request.number }} --json comments -q '.comments[].body')
         UUID=$(echo "$COMMENTS" | grep "Generated-UUID:" | awk '{print $2}')
         echo "UUID: $UUID"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GWR_GH_TOKEN }}
+        
+        
