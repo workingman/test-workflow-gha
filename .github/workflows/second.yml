@@ -1,14 +1,12 @@
-name: Second Workflow
-
+name: Deploy to dev after merge
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '.github/workflows/first_workflow.yml'
+  pull_request:
+    types:
+      - closed
 
 jobs:
-  echo_saved_date:
+  Run-Salto-Deployment:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
