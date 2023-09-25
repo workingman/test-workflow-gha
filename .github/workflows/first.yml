@@ -17,3 +17,5 @@ jobs:
     - name: Add comment with UUID
       run: |
         gh pr comment ${{ github.event.pull_request.number }} --body "Generated-UUID: ${{ steps.generate-uuid.outputs.uuid }}"
+      env:
+          GITHUB_TOKEN: ${{ secrets.GWR_GH_TOKEN }}
