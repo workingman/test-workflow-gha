@@ -1,9 +1,6 @@
-name: First Workflow
-
+name: Create deployment when PR opened
 on:
   pull_request:
-    branches:
-      - feature/*
     types:
       - opened
 
