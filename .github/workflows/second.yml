@@ -1,4 +1,4 @@
-name: Deploy to dev after merge
+name: Second Workflow
 
 on:
   pull_request:
@@ -6,15 +6,18 @@ on:
       - closed
 
 jobs:
-  Run-Salto-Deployment:
+  use_data:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
-    
+
     steps:
-    - name: Download UUID artifact
-      uses: actions/download-artifact@v2
+    - name: Restore UUID from cache
+      uses: actions/cache@v2
       with:
-        name: uuid-artifact-${{ github.event.pull_request.number }}
+        path: uuid.txt
+        key: uuid-${{ github.run_id }}
+        restore-keys: |
+          uuid-${{ github.run_id }}
 
     - name: Cat saved UUID
-      run: cat uuid.txt
+      run: cat uuid.txt || echo "UUID not found"
