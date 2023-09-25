@@ -14,6 +14,9 @@ jobs:
       id: generate-uuid
       run: echo "::set-output name=uuid::$(uuidgen)"
 
+    - name: Save UUID to file
+      run: echo "${{ steps.generate-uuid.outputs.uuid }}" > uuid.txt
+
     - name: Cache UUID
       uses: actions/cache@v2
       with:
@@ -21,4 +24,3 @@ jobs:
         key: uuid-${{ github.run_id }}
         restore-keys: |
           uuid-${{ github.run_id }}
-      run: echo "${{ steps.generate-uuid.outputs.uuid }}" > uuid.txt
