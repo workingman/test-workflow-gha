@@ -1,16 +1,14 @@
-name: Second Workflow
+name: Deploy to dev after merge
 
 on:
-  pull_request_review:
+  pull_request:
     types:
-      - submitted
-    branches:
-      - main
+      - closed
 
 jobs:
-  echo_saved_uuid:
+  Run-Salto-Deployment:
     runs-on: ubuntu-latest
-    if: github.event.review.state == 'approved'
+    if: github.event.pull_request.merged == true
     
     steps:
     - name: Download UUID artifact
