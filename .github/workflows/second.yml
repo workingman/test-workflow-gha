@@ -11,12 +11,13 @@ jobs:
     if: github.event.pull_request.merged == true
 
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
     - name: Fetch UUID from PR comment
       run: |
         COMMENTS=$(gh pr view ${{ github.event.pull_request.number }} --json comments -q '.comments[].body')
         UUID=$(echo "$COMMENTS" | grep "Generated-UUID:" | awk '{print $2}')
         echo "UUID: $UUID"
       env:
-        GITHUB_TOKEN: ${{ secrets.GWR_GH_TOKEN }}
-        
-        
+        GH_TOKEN: ${{ secrets.GWR_GH_TOKEN }}
