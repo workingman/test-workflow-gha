@@ -6,21 +6,24 @@ on:
       - opened
 
 jobs:
-  generate_data:
+  generate_and_commit_data:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Generate UUID
       id: generate-uuid
       run: echo "::set-output name=uuid::$(uuidgen)"
 
     - name: Save UUID to file
-      run: echo "${{ steps.generate-uuid.outputs.uuid }}" > uuid.txt
+      run: echo "${{ steps.generate-uuid.outputs.uuid }}" > .github/uuid.txt
 
-    - name: Cache UUID
-      uses: actions/cache@v2
-      with:
-        path: uuid.txt
-        key: uuid-${{ github.run_id }}
-        restore-keys: |
-          uuid-${{ github.run_id }}
+    - name: Commit and push UUID
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git add .github/uuid.txt
+        git commit -m "Add UUID for PR #${{ github.event.pull_request.number }}"
+        git push
