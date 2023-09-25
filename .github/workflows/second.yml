@@ -1,19 +1,22 @@
-name: Deploy to dev after merge
+name: Second Workflow
+
 on:
-  pull_request:
+  pull_request_review:
     types:
-      - closed
+      - submitted
+    branches:
+      - main
 
 jobs:
-  Run-Salto-Deployment:
-    if: github.event.pull_request.merged == true
+  echo_saved_uuid:
     runs-on: ubuntu-latest
-
+    if: github.event.review.state == 'approved'
+    
     steps:
-    - name: Download datetime artifact
+    - name: Download UUID artifact
       uses: actions/download-artifact@v2
       with:
-        name: datetime-artifact
+        name: uuid-artifact-${{ github.event.pull_request.number }}
 
-    - name: Cat saved date and time
-      run: cat datetime.txt
+    - name: Cat saved UUID
+      run: cat uuid.txt
