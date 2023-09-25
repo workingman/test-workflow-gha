@@ -11,13 +11,8 @@ jobs:
     if: github.event.pull_request.merged == true
 
     steps:
-    - name: Restore UUID from cache
-      uses: actions/cache@v2
-      with:
-        path: uuid.txt
-        key: uuid-${{ github.run_id }}
-        restore-keys: |
-          uuid-${{ github.run_id }}
+    - name: Checkout code
+      uses: actions/checkout@v2
 
     - name: Cat saved UUID
-      run: cat uuid.txt || echo "UUID not found"
+      run: cat .github/uuid.txt
