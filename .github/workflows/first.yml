@@ -6,19 +6,19 @@ on:
       - opened
 
 jobs:
-  generate_uuid:
+  generate_data:
     runs-on: ubuntu-latest
 
     steps:
     - name: Generate UUID
       id: generate-uuid
       run: echo "::set-output name=uuid::$(uuidgen)"
-      
-    - name: Save UUID to file
-      run: echo "${{ steps.generate-uuid.outputs.uuid }}" > uuid.txt
 
-    - name: Upload UUID as artifact
-      uses: actions/upload-artifact@v2
+    - name: Cache UUID
+      uses: actions/cache@v2
       with:
-        name: uuid-artifact-${{ github.event.pull_request.number }}
         path: uuid.txt
+        key: uuid-${{ github.run_id }}
+        restore-keys: |
+          uuid-${{ github.run_id }}
+      run: echo "${{ steps.generate-uuid.outputs.uuid }}" > uuid.txt
